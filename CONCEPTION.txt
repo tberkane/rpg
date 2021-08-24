@@ -1,0 +1,35 @@
+EXTENSIONS
+1 - Teleportation
+Added a TeleportStone class. A TeleportStone is a Collectable which, when collected, teleports the player to a different position in the current area.
+Moreover, TeleportStone implements Logic so that its collection can be used as a condition to trigger other in-game events (making a rock disappear in our case).
+
+2 - Animation
+Added an Animation class whose job is to manage all of the sprites needed to animate an actor in a single direction. Thus, EnigmePlayer will have 4 Animations (one for each orientation) while a simple object such as a Torch which doesn't move will have only one Animation attribute.
+So the Animation class owns both a Sprite attribute "staticSprite" and a Sprite array "animationSprites" to cover all of the cases.
+Animation is also in charge of drawing itself, which is done through its draw method. Its parameters "animated" and "accelerated" allow the actor we want to draw to communicate its state to Animation so that it can be drawn in the right way.
+Animation's draw method makes use of two counters: "counter" and "delay", which are used respectively to iterate through "animationSprites" and to manipulate the speed at which the sprites change.
+
+3 - Running Mode
+This is implemented by adding a "running" boolean to EnigmePlayer. This boolean can be toggled on and off by pressing the R key.
+When running is true, the animation duration is divided by 2, thus doubling the movement speed.
+To synchronize the player's movement speed with its animation speed, we pass "running" as an argument to the draw method of the Animation class and modify the animation speed accordingly in the Animation class.
+
+4 - Pause Mode
+The pause mode is implemented in Area through the use of a "paused" boolean, which is toggled by pressing P.
+In the update method of Area, if the game is paused, a TextGraphics message is displayed on the screen and the area's actors are no longer updated and interactions are no longer processed.
+
+5 - Dialogues
+This is implemented at the level of EnigmePlayer, who now possesses a boolean "showDialog" which is made true when the player interacts with a TalkingEntity (a new type of AreaEntity which is characterized by a "message") and false when there is no more dialogue to show. EnigmePlayer also has a "dialog" attribute of type Dialog.
+When the player interacts with a TalkingEntity, the latter's "message" is displayed in a dialogue window.
+Dialogues are scrolled through by the push method of Dialog when SPACE is pressed.
+
+6 - Foreground and Darkness
+The Foreground class is very much like the Background class. The difference is that the Foreground is displayed on top of the player, which was achieved by changing the depth attribute of the sprite associated to Foregrounds to 1.
+A Foreground was used in the Darkness class, which is an AreaEntity whose role is to draw an all black overlay with a small light circle centered on the player. The drawing of this overlay can depend on a Logic signal, thus allowing us to draw the overlay only after a certain signal has been triggered for example.
+
+7 - Ice
+Ice is a new AreaEntity which makes the player slip uncontrollably by simply calling EnigmePlayer's move method in case of cell interaction.
+
+PERSONAL CHOICES
+1 - SignalRock controlled by a PressurePlate reappearing on top of the player
+This problem was solved by adding an interaction with SignalRocks in the EnigmePlayerHandler. This interaction tries forcing the player to move out of the rock and if it can't because a wall or another actor for example is blocking the way, the player is rotated by using Orientations's hisRight() method.
