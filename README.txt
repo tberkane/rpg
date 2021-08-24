@@ -1,3 +1,5 @@
+![](screenshot.png)
+
 -----How to launch-----
 
 In the Play class, you can replace "new Enigme()" at line 33 by "new Demo1()" or "new Demo2()" to launch the other parts of the project.
